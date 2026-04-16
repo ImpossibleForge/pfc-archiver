@@ -1,0 +1,10 @@
+# pfc-archiver v0.1.0 — CrateDB edition
+
+# TOML config parsing (Python 3.11+ has tomllib built in)
+tomli>=1.1.0; python_version < "3.11"
+
+# CrateDB connection (PostgreSQL wire protocol)
+psycopg2-binary>=2.9
+
+# S3 output (optional — only needed if output_dir starts with s3://)
+# boto3>=1.26

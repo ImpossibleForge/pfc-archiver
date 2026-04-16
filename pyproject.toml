@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=68,<77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pfc-archiver"
+version = "0.1.0"
+description = "Autonomous daemon that archives old CrateDB time-series data to PFC cold storage"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.8"
+keywords = [
+    "pfc", "jsonl", "compression", "logs", "archiving", "daemon",
+    "cratedb", "cold-storage", "duckdb", "s3",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
+    "Topic :: System :: Logging",
+    "Topic :: System :: Archiving",
+    "Topic :: Utilities",
+]
+
+# tomli is only needed on Python < 3.11 (3.11+ has tomllib built in)
+dependencies = [
+    "tomli>=1.1.0; python_version < '3.11'",
+]
+
+[project.optional-dependencies]
+# CrateDB connection
+postgres = ["psycopg2-binary>=2.9"]
+# S3 output (if output_dir starts with s3://)
+s3 = ["boto3>=1.26"]
+# Everything
+all = ["psycopg2-binary>=2.9", "boto3>=1.26"]
+
+[project.scripts]
+pfc-archiver = "pfc_archiver:main"
+
+[project.urls]
+Homepage   = "https://github.com/ImpossibleForge/pfc-archiver"
+Repository = "https://github.com/ImpossibleForge/pfc-archiver"
+
+[tool.setuptools]
+py-modules = ["pfc_archiver"]
