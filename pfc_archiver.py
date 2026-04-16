@@ -426,9 +426,8 @@ def delete_partition(
     """
     Delete the archived time range from the source database.
 
-    For CrateDB / TimescaleDB: uses a DELETE WHERE timestamp BETWEEN ...
-    For TimescaleDB partitioned hypertables: consider DROP CHUNK instead
-    (see commented code below) for near-instant deletion.
+    CrateDB: uses DELETE WHERE ts_column BETWEEN from_ts AND to_ts.
+    Deletion only runs if verify=true passed and row counts match exactly.
     """
     schema   = db_cfg.get("schema", "doc")
     table    = db_cfg["table"]

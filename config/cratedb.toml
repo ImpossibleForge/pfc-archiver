@@ -9,7 +9,7 @@
 # Source database
 # ---------------------------------------------------------------------------
 [db]
-db_type   = "cratedb"            # cratedb | timescaledb | questdb
+db_type   = "cratedb"
 host      = "localhost"
 port      = 5432                 # CrateDB PostgreSQL port
 user      = "crate"
