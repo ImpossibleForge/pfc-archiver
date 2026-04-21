@@ -20,3 +20,6 @@ local-archives/
 # Local config overrides (keep examples in config/ only)
 *.local.toml
 my_*.toml
+.env
+.pfc_buffer.jsonl
+.pfc_buffer.compressing
