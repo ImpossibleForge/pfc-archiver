@@ -1,0 +1,31 @@
+# pfc-archiver — Elasticsearch Configuration Example
+# ===================================================
+# Elasticsearch REST API port: 9200
+# Run:
+#   python pfc_archiver.py --config config/elasticsearch.toml --dry-run
+
+[db]
+db_type   = "elasticsearch"
+host      = "localhost"
+port      = 9200
+scheme    = "http"
+# user    = "elastic"              # uncomment if security enabled
+# password = "changeme"
+index     = "logs-2024.01"         # or use wildcard: "logs-*"
+ts_field  = "@timestamp"           # Elasticsearch timestamp field
+batch_size = 1000                  # docs per scroll page
+
+[archive]
+retention_days         = 30
+partition_days         = 1
+output_dir             = "./local-archives/"
+verify                 = true
+delete_after_archive   = false      # ES: use index lifecycle management (ILM) or DELETE /index
+log_dir                = "./archive_logs/"
+
+# Note: After archiving, delete old Elasticsearch indices via:
+#   DELETE /logs-2024.01
+# or use ILM (Index Lifecycle Management) policies.
+
+[daemon]
+interval_seconds = 3600

@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=68,<77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pfc-archiver"
+version = "0.2.1"
+description = "Autonomous daemon that archives old time-series data from databases to PFC cold storage"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.8"
+keywords = [
+    "pfc", "jsonl", "compression", "logs", "archiving", "daemon",
+    "cratedb", "timescaledb", "questdb", "clickhouse",
+    "elasticsearch", "loki", "influxdb", "druid", "duckdb",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
+    "Topic :: System :: Logging",
+    "Topic :: System :: Archiving",
+    "Topic :: Utilities",
+]
+
+# tomli is only needed on Python < 3.11 (3.11+ has tomllib built in)
+dependencies = [
+    "tomli>=1.1.0; python_version < '3.11'",
+]
+
+[project.optional-dependencies]
+# PostgreSQL-wire databases (CrateDB, TimescaleDB, QuestDB)
+postgres = ["psycopg2-binary>=2.9"]
+# HTTP databases (ClickHouse, Elasticsearch, Loki, Druid)
+http = ["requests>=2.28"]
+# InfluxDB v2
+influxdb = ["influxdb-client>=3.0"]
+# S3 output (if output_dir starts with s3://)
+s3 = ["boto3>=1.26"]
+# All database backends
+databases = ["psycopg2-binary>=2.9", "requests>=2.28", "influxdb-client>=3.0"]
+# Everything
+all = ["psycopg2-binary>=2.9", "requests>=2.28", "influxdb-client>=3.0", "boto3>=1.26"]
+
+[project.scripts]
+pfc-archiver = "pfc_archiver:main"
+
+[project.urls]
+Homepage   = "https://github.com/ImpossibleForge/pfc-archiver-cratedb"
+Repository = "https://github.com/ImpossibleForge/pfc-archiver-cratedb"
+
+[tool.setuptools]
+py-modules = ["pfc_archiver"]

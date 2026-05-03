@@ -1,0 +1,31 @@
+# pfc-archiver — Apache Druid Configuration Example
+# ==================================================
+# Druid Broker SQL API port: 8082
+# Run:
+#   python pfc_archiver.py --config config/druid.toml --dry-run
+
+[db]
+db_type    = "druid"
+host       = "localhost"
+port       = 8082                  # Druid Broker port
+scheme     = "http"
+# user     = "druid_system"        # uncomment if auth enabled
+# password = "secret"
+datasource = "wikipedia"           # Druid datasource name
+ts_column  = "__time"              # Druid's built-in time column
+batch_size = 10000
+
+[archive]
+retention_days         = 90        # Druid typically stores longer windows
+partition_days         = 1
+output_dir             = "./local-archives/"
+verify                 = true
+delete_after_archive   = false      # Druid: drop segments via Coordinator API
+log_dir                = "./archive_logs/"
+
+# Note: After archiving, drop old Druid segments via the Coordinator API:
+#   POST /druid/coordinator/v1/datasources/{name}/markUnused
+# Or configure auto-kill rules in the Coordinator.
+
+[daemon]
+interval_seconds = 3600

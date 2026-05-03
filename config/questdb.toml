@@ -1,0 +1,32 @@
+# pfc-archiver — QuestDB Configuration Example
+# =============================================
+# QuestDB PostgreSQL wire protocol port: 8812 (NOT 5432)
+# QuestDB has no schema concept — leave schema empty.
+#
+# Run:
+#   python pfc_archiver.py --config config/questdb.toml --dry-run
+#   python pfc_archiver.py --config config/questdb.toml --once
+
+[db]
+db_type   = "questdb"
+host      = "localhost"
+port      = 8812                    # QuestDB PG wire port (NOT 5432!)
+user      = "admin"
+password  = "quest"                 # QuestDB default password
+dbname    = "qdb"
+schema    = ""                      # QuestDB has no schema — leave empty
+table     = "trades"
+ts_column = "timestamp"             # QuestDB designated timestamp column
+
+# ---------------------------------------------------------------------------
+[archive]
+retention_days         = 30
+partition_days         = 1          # daily partitions (QuestDB typical)
+output_dir             = "./local-archives/"
+verify                 = true
+delete_after_archive   = false
+log_dir                = "./archive_logs/"
+
+# ---------------------------------------------------------------------------
+[daemon]
+interval_seconds = 3600

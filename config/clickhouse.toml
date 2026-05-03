@@ -1,0 +1,30 @@
+# pfc-archiver — ClickHouse Configuration Example
+# ================================================
+# ClickHouse HTTP API port: 8123
+# Run:
+#   python pfc_archiver.py --config config/clickhouse.toml --dry-run
+
+[db]
+db_type   = "clickhouse"
+host      = "localhost"
+port      = 8123                    # ClickHouse HTTP port
+user      = "default"
+password  = ""
+database  = "default"
+table     = "logs"
+ts_column = "event_time"
+
+[archive]
+retention_days         = 30
+partition_days         = 1
+output_dir             = "./local-archives/"
+verify                 = true
+delete_after_archive   = false      # ClickHouse: use ALTER TABLE DROP PARTITION manually
+log_dir                = "./archive_logs/"
+
+# Note: For ClickHouse, deletion after archive is best done via
+#   ALTER TABLE logs DROP PARTITION '2024-01-01'
+# pfc-archiver will log the archived ranges so you can automate this.
+
+[daemon]
+interval_seconds = 3600

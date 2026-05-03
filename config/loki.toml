@@ -1,0 +1,30 @@
+# pfc-archiver — Grafana Loki Configuration Example
+# ==================================================
+# Loki HTTP API port: 3100
+# Run:
+#   python pfc_archiver.py --config config/loki.toml --dry-run
+
+[db]
+db_type    = "loki"
+host       = "localhost"
+port       = 3100
+scheme     = "http"
+# user     = "admin"               # uncomment if auth enabled
+# password = "secret"
+query      = '{job="app"}'         # LogQL stream selector
+ts_column  = "timestamp"           # internal — Loki uses ns timestamps
+batch_size = 5000                  # log entries per request
+
+[archive]
+retention_days         = 14        # Loki logs are often short-lived
+partition_days         = 1
+output_dir             = "./local-archives/"
+verify                 = true
+delete_after_archive   = false      # Loki: set retention in loki-config.yaml instead
+log_dir                = "./archive_logs/"
+
+# Note: Loki data deletion is managed via the retention period in loki-config.yaml.
+# After archiving cold logs to PFC, configure shorter Loki retention to free space.
+
+[daemon]
+interval_seconds = 3600

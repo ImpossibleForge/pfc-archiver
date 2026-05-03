@@ -1,0 +1,18 @@
+# pfc-archiver — Python dependencies
+# Install only what your database needs.
+
+# TOML config parsing (Python 3.11+ has tomllib built in)
+# For Python 3.8-3.10:
+tomli>=1.1.0; python_version < "3.11"
+
+# PostgreSQL-wire databases: CrateDB, TimescaleDB, QuestDB
+psycopg2-binary>=2.9
+
+# HTTP-based databases: ClickHouse, Elasticsearch, Grafana Loki, Apache Druid
+requests>=2.28
+
+# InfluxDB v2
+influxdb-client>=3.0
+
+# S3 output (optional — only needed if output_dir starts with s3://)
+# boto3>=1.26

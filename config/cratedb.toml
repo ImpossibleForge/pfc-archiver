@@ -1,0 +1,59 @@
+# pfc-archiver — CrateDB Configuration Example
+# =============================================
+# Copy this file, adjust values, then run:
+#   python pfc_archiver.py --config config/cratedb.toml --dry-run
+#   python pfc_archiver.py --config config/cratedb.toml --once
+#   python pfc_archiver.py --config config/cratedb.toml   # daemon mode
+
+# ---------------------------------------------------------------------------
+# Source database
+# ---------------------------------------------------------------------------
+[db]
+db_type   = "cratedb"
+host      = "localhost"
+port      = 5432                 # CrateDB PostgreSQL port
+user      = "crate"
+password  = ""                   # empty = no auth (default CrateDB dev setup)
+dbname    = "doc"
+schema    = "doc"
+table     = "logs"               # table to archive
+ts_column = "timestamp"          # timestamp column for time-range partitioning
+
+# ---------------------------------------------------------------------------
+# Archive settings
+# ---------------------------------------------------------------------------
+[archive]
+# Data older than retention_days will be archived + (optionally) deleted
+retention_days         = 30
+
+# Partition size: each archive file covers partition_days of data
+# Smaller = more files, more granular recovery. Recommended: 1 or 7.
+partition_days         = 1
+
+# Archive destination:
+#   S3:    "s3://my-bucket/cold-storage/"
+#   Local: "/mnt/nas/pfc-archives/"  or  "./local-archives/"
+output_dir             = "./local-archives/"
+
+# S3 options (only used if output_dir starts with s3://)
+# s3_region     = "eu-central-1"
+# s3_endpoint   = ""             # leave empty for AWS, or MinIO URL
+# s3_access_key = ""             # leave empty to use env vars / IAM role
+# s3_secret_key = ""
+
+# Verify archive row count == exported row count before deleting from DB
+verify                 = true
+
+# DELETE archived rows from source DB after successful verify
+# Set to false first to test without data loss risk!
+delete_after_archive   = false   # ← change to true when confident
+
+# Directory for JSON run logs
+log_dir                = "./archive_logs/"
+
+# ---------------------------------------------------------------------------
+# Daemon settings (ignored when --once is used)
+# ---------------------------------------------------------------------------
+[daemon]
+# How often to check for new archivable partitions (in seconds)
+interval_seconds = 3600          # 1 hour

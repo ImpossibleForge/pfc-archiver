@@ -1,0 +1,29 @@
+# pfc-archiver — TimescaleDB Configuration Example
+# ==================================================
+# Run:
+#   python pfc_archiver.py --config config/timescaledb.toml --dry-run
+#   python pfc_archiver.py --config config/timescaledb.toml --once
+
+[db]
+db_type   = "timescaledb"           # cratedb | timescaledb | questdb
+host      = "localhost"
+port      = 5432                    # standard PostgreSQL port
+user      = "postgres"
+password  = ""                      # or set via PG_PASSWORD env var
+dbname    = "postgres"
+schema    = "public"
+table     = "conditions"            # TimescaleDB hypertable to archive
+ts_column = "time"                  # default TimescaleDB timestamp column
+
+# ---------------------------------------------------------------------------
+[archive]
+retention_days         = 90         # keep 90 days hot in TimescaleDB
+partition_days         = 7          # weekly archive chunks (good for hypertables)
+output_dir             = "./local-archives/"
+verify                 = true
+delete_after_archive   = false      # set true when confident
+log_dir                = "./archive_logs/"
+
+# ---------------------------------------------------------------------------
+[daemon]
+interval_seconds = 3600
