@@ -1,6 +1,6 @@
-# Changelog — pfc-archiver
+# Changelog — pfc-archiver-cratedb
 
-All notable changes to pfc-archiver are documented here.
+All notable changes are documented here.
 
 ---
 
@@ -12,30 +12,17 @@ All notable changes to pfc-archiver are documented here.
   opened without a context manager (`with` block), leaving it unclosed after each
   partition verify. Under sustained load with many partitions this would exhaust the
   OS file descriptor limit and crash the daemon mid-run. Fixed by using `with open()`
-  throughout.
+  throughout. Bug found via live CrateDB integration tests (8/8 passing).
 
 ---
 
 ## v0.2.0 — 2026-04-14
 
-Initial public release supporting all major time-series databases.
-
-### Databases supported
-
-| Database | Config `db_type` | Protocol |
-|----------|-----------------|----------|
-| CrateDB | `cratedb` | PostgreSQL wire |
-| TimescaleDB | `timescaledb` | PostgreSQL wire |
-| QuestDB | `questdb` | PostgreSQL wire |
-| ClickHouse | `clickhouse` | HTTP API (JSONEachRow) |
-| Elasticsearch | `elasticsearch` | REST scroll API |
-| Grafana Loki | `loki` | HTTP query_range API |
-| InfluxDB v2 | `influxdb` | Flux pivot API |
-| Apache Druid | `druid` | SQL HTTP |
+Initial public release.
 
 ### Features
 
-- TOML config file — one file per database, all settings in one place
+- TOML config file — one file, all settings in one place
 - `--dry-run` — print what would be archived without writing anything
 - `--once` — archive one cycle and exit (good for cron jobs)
 - `--config` — point to any TOML config file
@@ -45,12 +32,8 @@ Initial public release supporting all major time-series databases.
 - JSON run log per cycle written to `log_dir`
 - Graceful shutdown on SIGTERM / SIGINT — waits for current partition to finish
 
-### Config examples
-
-See the `config/` directory for ready-to-use TOML files for each database.
-
 ---
 
 ## v0.1.0 — 2026-04-13
 
-- Initial build with CrateDB, TimescaleDB, QuestDB support (PostgreSQL wire only)
+- Initial build — CrateDB export via PostgreSQL wire protocol

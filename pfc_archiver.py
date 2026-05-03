@@ -1,20 +1,15 @@
 #!/usr/bin/env python3
 """
-pfc-archiver v0.2.0 — Autonomous cold partition archive daemon
-==============================================================
+pfc-archiver-cratedb v0.2.1 — Autonomous cold partition archive daemon for CrateDB
+====================================================================================
 
-Watches a time-series database for data older than a configurable retention
-window, compresses it to PFC format, writes it to local storage or S3,
-verifies integrity, and optionally deletes the archived rows from the source.
-
-Supported databases:
-  PostgreSQL wire: CrateDB, TimescaleDB, QuestDB
-  HTTP API:        ClickHouse, Elasticsearch, Grafana Loki, Apache Druid
-  Flux API:        InfluxDB v2
+Watches CrateDB for data older than a configurable retention window, compresses
+it to PFC format, writes it to local storage or S3, verifies integrity, and
+optionally deletes the archived rows from the source.
 
 Archive cycle per partition:
   1. SCAN    — find partitions older than retention_days
-  2. EXPORT  — stream rows from the database to a temp JSONL file
+  2. EXPORT  — stream rows via PostgreSQL wire protocol to a temp JSONL file
   3. COMPRESS — pipe through pfc_jsonl compress -> .pfc + .pfc.bidx + .pfc.idx
   4. UPLOAD  — copy archive to output_dir (local path or s3://bucket/prefix/)
   5. VERIFY  — decompress and count rows; must match exported count
@@ -22,7 +17,7 @@ Archive cycle per partition:
   7. LOG     — write JSON run log to log_dir
 
 Requirements:
-  pip install psycopg2-binary requests influxdb-client
+  pip install psycopg2-binary
   pip install tomli   # Python < 3.11 only (3.11+ has tomllib built in)
 
 Usage:
