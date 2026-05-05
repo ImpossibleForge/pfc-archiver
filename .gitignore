@@ -4,11 +4,17 @@ __pycache__/
 dist/
 build/
 .venv/
+venv/
+.pytest_cache/
 
 # Output archives
 *.pfc
-*.pfc.bidx
-*.pfc.idx
+*.bidx
+.pfc_buffer.*
+
+# Test dirs
+test-archives/
+test-logs/
 
 # Temp JSONL files created during export
 *.jsonl
